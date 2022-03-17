@@ -13,7 +13,7 @@ fi
 cd integration-tests
 
 if [[ ! -e ~/.dbt/profiles.yml ]]; then
-    mkdir -p ~/.dbt
+    mkdir -p ~/.dbt 
     cp ci/profiles.yml ~/.dbt/profiles.yml
 fi
 
