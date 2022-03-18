@@ -90,3 +90,25 @@ jobs:
         uses: andymckay/labeler@1.0.4
         with:
           remove-labels: "safe to test"
+
+  
+  pr-check-skipped-tests:
+    runs-on: ubuntu-latest
+    needs:
+      [
+        pr-integration-tests-snowflake,
+        pr-integration-tests-bigquery,
+        pr-integration-tests-postgres,
+      ]
+    environment: test
+    if: | 
+      always() && 
+      (needs.pr-integration-tests-snowflake.result == 'skipped' ||
+       needs.pr-integration-tests-bigquery.result == 'skipped' || 
+       needs.pr-integration-tests-postgres.result == 'skipped')
+    steps:
+      - name: Check for skipped integration tests
+        uses: actions/github-script@v3
+        with:
+          script: |
+              core.setFailed('Some Integratio Tests were skipped!')
